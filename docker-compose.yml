@@ -1,0 +1,52 @@
+version: '3'
+
+services:
+  user-management:
+    build:
+      context: ./user-management
+      dockerfile: Dockerfile
+    ports:
+      - "7073:7073"
+    env_file:
+      - ./user-management/.env
+    volumes:
+      - shared-data:/shared
+    depends_on:
+      - mongo
+
+  course-management:
+    build:
+      context: ./course-management
+      dockerfile: Dockerfile
+    ports:
+      - "7071:7071"
+    env_file:
+      - ./course-management/.env
+    volumes:
+      - shared-data:/shared
+    depends_on:
+      - mongo
+
+  payment-management:
+    build:
+      context: ./payment-management
+      dockerfile: Dockerfile
+    ports:
+      - "7072:7072"
+    env_file:
+      - ./payment-management/.env
+    volumes:
+      - shared-data:/shared
+    depends_on:
+      - mongo
+
+  mongo:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+volumes:
+  shared-data:
+  mongo-data:
